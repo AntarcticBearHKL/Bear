@@ -12,18 +12,12 @@ while True:
         break
     print('Password Wrong!')
 
-print('Login Success...')
-input("Press Enter To Continue ...")
 os.system('cls')
 
 Bear.NewServer('ConsoleServer', Key, 'OWM4MjVjZmMyNWJjMzIwZmRjYjc3NzU2MTMwZjcyZGU=YTczYmZmZThmMjZhNDUzNzZkMTY5NDQ4ZGRiYzhmMzY=OGRiNjYwOThhNzYwZTRmYTdiN2E3ODZkYTJkNWVjNzI=YjA5N2VmZDU3YWJjYzNmYzI3MTIzMDJkZjA0NGE3Yjc=')
 
-def AdditionHandler(Explain):
-    return input(Explain+': ')
-Core.SetAdditionHandler(AdditionHandler)
-
 while(True):
-    Input = input("Code: ")
+    Input = input("Input Code: ")
     if Bear.CatchResult(Core.Cast(Input)):
         input('Success. Press Enter To Continue...')
     else:
