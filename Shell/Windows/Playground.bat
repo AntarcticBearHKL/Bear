@@ -1,3 +1,3 @@
 cd /d F:\Github\Bear\Shell
-python PlaygroundAlpha.py
+python Playground.py
 pause
