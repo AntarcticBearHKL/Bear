@@ -18,7 +18,19 @@ Bear.NewServer('ConsoleServer', Key, 'OWM4MjVjZmMyNWJjMzIwZmRjYjc3NzU2MTMwZjcyZG
 
 while(True):
     Input = input("Input Code: ")
-    if Bear.CatchResult(Core.Cast(Input)):
+    Result = Core.Cast(Input)
+    if type(Result) == str:
+        print(Result)
+        input('Success. Press Enter To Continue...')
+    elif type(Result) == list:
+        for Item in Result:
+            print(Item)
+        input('Success. Press Enter To Continue...')
+    elif type(Result) == dict:
+        for List in Result:
+            print(List, '\n')
+            print(Result[List])
+
         input('Success. Press Enter To Continue...')
     else:
         input('Failed. Press Enter To Continue...')
