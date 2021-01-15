@@ -9,7 +9,8 @@ import numpy
 Data = {}
 TimePoint = Date()
 
-Idea = []
+Put = {}
+Short = {}
 Profit = 0
 
 def GetMarketInfo():
@@ -91,7 +92,7 @@ def HomePage():
         print('\n')
 
 def ThinkThink():
-    pass
+    if Data['EMA510IN']
 
 def Handler():
     Command = input('Command: ')
