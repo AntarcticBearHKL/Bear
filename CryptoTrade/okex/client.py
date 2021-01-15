@@ -38,9 +38,9 @@ class Client(object):
             print("url:", url)
             self.first = False
 
-        print("url:", url)
+        #print("url:", url)
         # print("headers:", header)
-        print("body:", body)
+        #print("body:", body)
 
         # send request
         response = None

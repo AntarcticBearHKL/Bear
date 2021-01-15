@@ -1,3 +1,3 @@
-cd /d "F:\Github\Bear\TimeCapsule"
-python Console.py
+cd /d "F:\Github\Bear\CryptoTrade"
+python Trade.py
 pause
