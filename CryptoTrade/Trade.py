@@ -8,10 +8,13 @@ import numpy
 
 Data = {}
 TimePoint = Date()
+StartTime = Date()
 
-Put = {}
-Short = {}
-Profit = 0
+Long = []
+Short = []
+Profit = [0]
+
+UpdateCounter = 0
 
 def GetMarketInfo():
     Data['Market'] = Core.Swap.get_specific_ticker('BTC-USDT-SWAP')
@@ -27,21 +30,30 @@ def GetHoldingInfo():
 
 
 def Update():
+    global UpdateCounter
     while(True):
         GetMarketInfo()
         GetOrderInfo()
         GetHoldingInfo()
+        ClosePrice()
         EMA()
+        MACD()
+        UpdateCounter += 1
         Sleep(1)
 UpdateThread = Multitask.SimpleThread(Update, ()).Start()
 
 def HomePage():
+    global Long
+    global Short
+    global Profit
     try:
         System.ClearScreen()
 
-        print('------', Date().String(2), '------')
+        print('------ 系统时间：', Date().String(2))
+        print('------ 已运行时间的：', Date()-StartTime, ' 秒')
+        print('------ 已更新: ', UpdateCounter, ' 次')
 
-        print('\n\033[1;32;40m ---%s%s--- \033[0m'%('当前价格：', Data['Market']['last']))
+        print('\n\033[1;32;40m----%s%s%s---- \033[0m'%(' 当前价格：', Data['Market']['last'], ' '))
 
         EMADict = {
             '现价': float(Data['Market']['last']), 
@@ -54,6 +66,16 @@ def HomePage():
 
         print('EMA 五十差：', [Data['EMA510IN'][-3], Data['EMA510IN'][-2], Data['EMA510IN'][-1]])
         print('\n')
+
+        print('DIF: ', Data['DIF'][-5:])
+        print('DEA: ', Data['DEA'][-5:])
+        print('MACD: ', Data['MACD'][-5:])
+
+        print('Long', Long)
+        print('Short', Short)
+        print('Profit', Profit)
+
+        print('ProfitMean', numpy.mean(Profit))
 
         if len(Data['Order']) != 0:
             print('\033[1;36;40m ---%s--- \033[0m'%('等待成交：'))
@@ -92,7 +114,26 @@ def HomePage():
         print('\n')
 
 def ThinkThink():
-    if Data['EMA510IN']
+    global Long
+    global Short
+    global Profit
+
+    if Data['DEA'][-2]*Data['DEA'][-3]<0:
+        if Data['DEA'][-2]>0: ##买入看涨点位
+            Long.append([0, Date().String(), Data['Market']['last']])
+        else: ##买入看空点位
+            Short.append([0, Date().String(), Data['Market']['last']])
+
+    if len(Long) == 0 or len(Short) == 0:
+        return
+    if Data['DIF'][-2]<Data['DIF'][-3]<0: ##卖出看涨点位
+        if Long[-1][0] == 1:
+            Profit.append(float(Data['Market']['last']) - float(Long[-1][2]))
+            Long.append([1, Date().String(), Data['Market']['last']])
+    else: ##卖出看空点位
+        if Short[-1][0] == 1:
+            Profit.append(float(Data['Market']['last']) - float(Short[-1][2]))
+            Short.append([1, Date().String(), Data['Market']['last']])    
 
 def Handler():
     Command = input('Command: ')
@@ -137,11 +178,10 @@ def Liquidate(Direction, Size, Price):
 def CancelOrder():
     pass
 
-
-def EMA():
+def ClosePrice(Period = 3):
     Time = Date()
     ClosePrice = []
-    for i in range(1):
+    for i in range(Period):
         End = Time.ISOString()
         Start = Time.Shift(Hour=-2).ISOString()
         Result = Core.Swap.get_kline(instrument_id='BTC-USDT-SWAP',start=Start, end=End, granularity='60')
@@ -150,12 +190,13 @@ def EMA():
         if i!=0:
             Close = Close[:-1]
         ClosePrice = Close + ClosePrice
-    ClosePrice = numpy.array(ClosePrice)
+    Data['ClosePrice'] = ClosePrice
 
-    Data['EMA5'] = talib.EMA(ClosePrice, timeperiod=5)
-    Data['EMA10'] = talib.EMA(ClosePrice, timeperiod=10)
-    Data['EMA20'] = talib.EMA(ClosePrice, timeperiod=20)
-    Data['EMA60'] = talib.EMA(ClosePrice, timeperiod=60)
+def EMA():
+    Data['EMA5'] = talib.EMA(numpy.array(Data['ClosePrice']), timeperiod=5)
+    Data['EMA10'] = talib.EMA(numpy.array(Data['ClosePrice']), timeperiod=10)
+    Data['EMA20'] = talib.EMA(numpy.array(Data['ClosePrice']), timeperiod=20)
+    Data['EMA60'] = talib.EMA(numpy.array(Data['ClosePrice']), timeperiod=60)
     
     for Item in ['EMA5','EMA10','EMA20','EMA60']:
         TempList = []
@@ -173,13 +214,49 @@ def EMA():
         else:
             Data['EMA510IN'].append(None)
 
+def MACD():
+    DIF, DEA, NOIR = talib.MACD(
+        numpy.array(Data['ClosePrice']),
+        fastperiod=2, 
+        slowperiod=10, 
+        signalperiod=2)
+
+    Data['DIF'] = []
+    Data['DEA'] = []
+    Data['MACD'] = []
+
+    for Item in DIF:
+        if numpy.isnan(Item):
+            Data['DIF'].append(None)
+        else:
+            Data['DIF'].append(round(Item,2))
+
+    for Item in DEA:
+        if numpy.isnan(Item):
+            Data['DEA'].append(None)
+        else:
+            Data['DEA'].append(round(Item,2))
+
+    for Item in list(DIF - DEA):
+        if numpy.isnan(Item):
+            Data['MACD'].append(None)
+        else:
+            Data['MACD'].append(round(Item*2,2))
+    
+
 System.ClearScreen()
+Sleep(3)
 while(True):  
+    HomePage()
+    ThinkThink()
+    Sleep(1)
+    continue
     try:
         HomePage()
         ThinkThink()
-        Sleep(2)
-    except KeyboardInterrupt:
-        Handler()
+        Sleep(1)
+    except Exception as e:
+        print('Loading...', e)
+        Sleep(1)
 
     System.ClearScreen()
