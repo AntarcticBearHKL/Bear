@@ -341,7 +341,7 @@ if __name__ == '__main__':
     # 公共-获取合约历史资金费率
     # result = swapAPI.get_historical_funding_rate(instrument_id='', limit='')
     # 公共-获取历史K线数据
-    # result = swapAPI.get_history_kline(instrument_id='', start='', end='', granularity='')
+     result = swapAPI.get_history_kline(instrument_id='', start='', end='', granularity='')
 
 # option api test
 # 期权合约API

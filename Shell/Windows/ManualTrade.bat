@@ -1,3 +1,3 @@
 cd /d "F:\Github\Bear\CryptoTrade"
-python Trade.py
+python Manual.py
 pause

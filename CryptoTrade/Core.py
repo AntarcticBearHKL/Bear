@@ -26,3 +26,17 @@ Index = index.IndexAPI(api_key, secret_key, passphrase, False)
 Information = information.InformationAPI(api_key, secret_key, passphrase, False)
 
 Swap = swap.SwapAPI(api_key, secret_key, passphrase, False)
+
+
+def Open(Direction, Size, Price, ID='DefaultOrder'):
+    Core.Swap.take_order(instrument_id='BTC-USDT-SWAP', 
+        type=Direction, price=Price, 
+        size=Size, client_oid=ID)
+
+def Liquidate(Direction, Size, Price):
+    Core.Swap.take_order(instrument_id='BTC-USDT-SWAP', 
+        type=int(Direction) + 2, price=Price, 
+        size=Size, client_oid=ID)
+
+def CancelOrder():
+    pass
