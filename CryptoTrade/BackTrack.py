@@ -16,9 +16,7 @@ Long = [[-1]]
 Short = [[-1]]
 Profit = []
 
-TestHour = 600
-
-def Price(Period = int(TestHour/2)):
+def Price():
     global Data
 
     Time = Date()
@@ -29,10 +27,11 @@ def Price(Period = int(TestHour/2)):
     LowPrice = []
     ClosePrice = []
 
-    for i in range(Period):
+    for i in range(10):
+        print(i)
         End = Time.ISOString()
-        Start = Time.Shift(Hour=-2).ISOString()
-        Result = Core.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='60')
+        Start = Time.Shift(Day=-10).ISOString()
+        Result = Core.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
 
         TS = [price[0] for price in Result]
         TS.reverse()
@@ -93,8 +92,8 @@ def EMA():
 def MACD():
     DIF, DEA, NOIR = talib.MACD(
         numpy.array(Data['ClosePrice']),
-        fastperiod=10, 
-        slowperiod=20, 
+        fastperiod=8, 
+        slowperiod=16, 
         signalperiod=10)
 
     Data['DIF'] = []
@@ -129,7 +128,6 @@ def MACD():
             Data['MACDIN'].append(round(Data['MACD'][Counter]-Data['MACD'][Counter-1],2))
 
 
-
 def ThinkThink(TimePoint):
     global Long
     global Short
@@ -145,10 +143,10 @@ def ThinkThink(TimePoint):
             Data['OpenPrice'][TimePoint]])
 
     if Data['MACDIN'][TimePoint-2] * Data['MACDIN'][TimePoint-1] < 0:
-        if Data['MACDIN'][TimePoint-1] > 0 and Long[-1][0] == 0:
+        if Data['MACDIN'][TimePoint-1] < 0 and Long[-1][0] == 0:
             Profit.append(Data['OpenPrice'][TimePoint] - Long[-1][2])
             Long.append([1, Data['TimeStamp'][TimePoint], Data['OpenPrice'][TimePoint]])
-        elif Data['MACDIN'][TimePoint-1] < 0 and Long[-1][0] == 0:
+        elif Data['MACDIN'][TimePoint-1] > 0 and Long[-1][0] == 0:
             Profit.append(Data['OpenPrice'][TimePoint] - Short[-1][2])
             Short.append([1, Data['TimeStamp'][TimePoint], Data['OpenPrice'][TimePoint]])  
 
@@ -169,23 +167,27 @@ for Counter in range(len(Data['TimeStamp'])):
             break
     if ItemNum == len(Data):
         break
-'''
+
 while (StartPoint+Offset+Period)<len(Data['TimeStamp']):
     ThinkThink(StartPoint+Offset+Period)
     Period += 1
 
-for O in Long[-6:]:
-    print(O)
+for II in Long[-6:]:
+    print(II)
+
+print(Profit[-20:])
 print(numpy.mean(Profit))
 TradeTimes = ((len(Long)-1)/2) + ((len(Short)-1)/2)
 print(int(TradeTimes))
-'''
+
 '''
 St = -50
-En = -1
+En = -40
 while St<=En:
     print(Data['TimeStamp'][St])
     print(Data['MACDIN'][St])
     St+=1
 '''
+
+print(len(Data['TimeStamp']))
 input()
