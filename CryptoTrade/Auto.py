@@ -14,10 +14,6 @@ TimePoint = Date()
 StartTime = Date()
 Error = []
 
-Long = [[-1]]
-Short = [[-1]]
-Profit = []
-
 UpdateCounter = 0
 
 def GetMarketInfo():
@@ -51,10 +47,6 @@ def Update():
         Error.append(e)
 
 def HomePage():
-    global Long
-    global Short
-    global Profit
-    global Error
 
     System.ClearScreen()
 
@@ -161,8 +153,9 @@ def ThinkThink():
             Short.append([1, Date().String(), Data['ClosePrice'][-2]])    
 
 
-def Price(Period = 3):    
+def Price():
     global Data
+
     Time = Date()
     
     TimeStamp = []
@@ -171,11 +164,10 @@ def Price(Period = 3):
     LowPrice = []
     ClosePrice = []
 
-    for i in range(Period):
-        print(i)
+    for i in range(3):
         End = Time.ISOString()
-        Start = Time.Shift(Hour=-2).ISOString()
-        Result = Core.Swap.get_kline(instrument_id='BTC-USDT-SWAP',start=Start, end=End, granularity='60')
+        Start = Time.Shift(Day=-10).ISOString()
+        Result = Core.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
 
         TS = [price[0] for price in Result]
         TS.reverse()
@@ -200,6 +192,8 @@ def Price(Period = 3):
         HighPrice = High + HighPrice
         LowPrice = Low + LowPrice
         ClosePrice = Close + ClosePrice
+
+        Sleep(0.5)
 
     Data['TimeStamp'] = TimeStamp
     Data['OpenPrice'] = OpenPrice
@@ -232,13 +226,14 @@ def EMA():
 def MACD():
     DIF, DEA, NOIR = talib.MACD(
         numpy.array(Data['ClosePrice']),
-        fastperiod=10, 
-        slowperiod=20, 
+        fastperiod=8, 
+        slowperiod=16, 
         signalperiod=10)
 
     Data['DIF'] = []
     Data['DEA'] = []
     Data['MACD'] = []
+    Data['MACDIN'] = []
 
     for Item in DIF:
         if numpy.isnan(Item):
@@ -257,6 +252,14 @@ def MACD():
             Data['MACD'].append(None)
         else:
             Data['MACD'].append(round(Item*2,2))
+
+    for Counter in range(len(Data['MACD'])):
+        if Counter == 0:
+            Data['MACDIN'].append(None)
+        elif Data['MACD'][Counter-1] == None:
+            Data['MACDIN'].append(None)
+        else:
+            Data['MACDIN'].append(round(Data['MACD'][Counter]-Data['MACD'][Counter-1],2))
     
 System.ClearScreen()
 Multitask.SimpleThread(Update, ()).Start()
