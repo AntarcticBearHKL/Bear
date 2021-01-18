@@ -139,8 +139,12 @@ class CoreSystem:
 
         for i in range(Num):
             End = Time.ISOString()
-            Start = Time.Shift(Day=-10).ISOString()
-            Result = self.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
+            if False:
+                Start = Time.Shift(Hour=-2).ISOString()
+                Result = self.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='60')
+            else:
+                Start = Time.Shift(Day=-10).ISOString()
+                Result = self.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
 
             TS = [price[0] for price in Result]
             TS.reverse()

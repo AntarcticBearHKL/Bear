@@ -62,6 +62,8 @@ def HomePage():
 
     print("错误次数: ", len(Core.Error))
 
+    print(Core.Data['OpenPrice'][-3:])
+
     if len(Core.Data['Order']) != 0:
         print('\033[1;36;40m ---%s--- \033[0m'%('等待成交：'))
         Typelist = [None, "买多：", "买空：", "平多：", "平空："]

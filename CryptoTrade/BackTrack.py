@@ -2,7 +2,7 @@ from PyBear.System.Chronus import Date
 from PyBear.System.Chronus import Sleep
 from Core import CoreSystem
 import numpy
-Reload = 0
+Reload = 1
 StartPoint = 0
 Offset = 3
 Period = 0
@@ -14,7 +14,6 @@ def ThinkThink(TimePoint):
         if Core.Data['MACD'][TimePoint-1] > 0 and Core.Long[-1][0] != 0:
             Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], 
             Core.Data['OpenPrice'][TimePoint]])
-
         elif Core.Data['MACD'][TimePoint-1] < 0 and Core.Short[-1][0] != 0:
             Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], 
             Core.Data['OpenPrice'][TimePoint]])
@@ -28,7 +27,7 @@ def ThinkThink(TimePoint):
             Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  
 
 if Reload:
-    Core.HistoryPrice(3)
+    Core.HistoryPrice(9)
     Core.DataSave(r'C:\Users\Happy\Desktop\BackTrack.txt')
 else:
     Core.DataLoad(r'C:\Users\Happy\Desktop\BackTrack.txt')
