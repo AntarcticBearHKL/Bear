@@ -122,7 +122,7 @@ while(True):
         ThinkThink()
         Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
         Multitask.SimpleThread(Update, ()).Start()
-        Sleep(3)
+        Sleep(1)
     except KeyError as e:
         print("正在加载：", e)
         Sleep(1)

@@ -138,6 +138,7 @@ class CoreSystem:
         ClosePrice = []
 
         for i in range(Num):
+            print(i)
             End = Time.ISOString()
             if False:
                 Start = Time.Shift(Hour=-2).ISOString()
@@ -200,12 +201,12 @@ class CoreSystem:
             else:
                 self.Data['EMA510IN'].append(None)
 
-    def MACD(self):
+    def MACD(self, Fastperiod=10, Slowperiod=20, Signalperiod=10):
         DIF, DEA, NOIR = talib.MACD(
             numpy.array(self.Data['ClosePrice']),
-            fastperiod=10, 
-            slowperiod=20, 
-            signalperiod=10)
+            fastperiod=Fastperiod, 
+            slowperiod=Slowperiod, 
+            signalperiod=SignalPeriod)
 
         self.Data['DIF'] = []
         self.Data['DEA'] = []
@@ -237,3 +238,21 @@ class CoreSystem:
                 self.Data['MACDIN'].append(None)
             else:
                 self.Data['MACDIN'].append(round(self.Data['MACD'][Counter]-self.Data['MACD'][Counter-1],2))
+
+
+    def ThinkThink(TimePoint):
+        if Core.Data['MACD'][TimePoint-2] * Core.Data['MACD'][TimePoint-1] < 0:
+            if Core.Data['MACD'][TimePoint-1] > 0 and Core.Long[-1][0] != 0:
+                Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], 
+                Core.Data['OpenPrice'][TimePoint]])
+            elif Core.Data['MACD'][TimePoint-1] < 0 and Core.Short[-1][0] != 0:
+                Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], 
+                Core.Data['OpenPrice'][TimePoint]])
+
+        if Core.Data['MACDIN'][TimePoint-2] * Core.Data['MACDIN'][TimePoint-1] < 0:
+            if Core.Data['MACDIN'][TimePoint-1] < 0 and Core.Long[-1][0] == 0:
+                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Long[-1][2])
+                Core.Long.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
+            elif Core.Data['MACDIN'][TimePoint-1] > 0 and Core.Short[-1][0] == 0:
+                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Short[-1][2])
+                Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  

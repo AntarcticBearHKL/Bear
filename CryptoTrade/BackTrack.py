@@ -9,25 +9,8 @@ Period = 0
 
 Core = CoreSystem()
 
-def ThinkThink(TimePoint):
-    if Core.Data['MACD'][TimePoint-2] * Core.Data['MACD'][TimePoint-1] < 0:
-        if Core.Data['MACD'][TimePoint-1] > 0 and Core.Long[-1][0] != 0:
-            Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], 
-            Core.Data['OpenPrice'][TimePoint]])
-        elif Core.Data['MACD'][TimePoint-1] < 0 and Core.Short[-1][0] != 0:
-            Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], 
-            Core.Data['OpenPrice'][TimePoint]])
-
-    if Core.Data['MACDIN'][TimePoint-2] * Core.Data['MACDIN'][TimePoint-1] < 0:
-        if Core.Data['MACDIN'][TimePoint-1] < 0 and Core.Long[-1][0] == 0:
-            Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Long[-1][2])
-            Core.Long.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
-        elif Core.Data['MACDIN'][TimePoint-1] > 0 and Core.Short[-1][0] == 0:
-            Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Short[-1][2])
-            Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  
-
 if Reload:
-    Core.HistoryPrice(9)
+    Core.HistoryPrice(3)
     Core.DataSave(r'C:\Users\Happy\Desktop\BackTrack.txt')
 else:
     Core.DataLoad(r'C:\Users\Happy\Desktop\BackTrack.txt')
