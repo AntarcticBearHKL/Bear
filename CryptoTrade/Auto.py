@@ -20,7 +20,7 @@ def Update():
         Core.GetMarketInfo()
         Core.GetOrderInfo()
         Core.GetHoldingInfo()
-        Core.Price(3)
+        Core.PriceLatest(3)
         Core.EMA()
         Core.MACD()
 
@@ -32,7 +32,7 @@ def Update():
 
 def HomePage():
     global UpdateCounter
-    
+
     System.ClearScreen()
 
     print('------ 系统时间：', Date().String(2))
@@ -41,21 +41,11 @@ def HomePage():
 
     print('\n\033[1;32;40m----%s%s%s---- \033[0m'%(' 当前价格：', Core.D['Market']['last'], ' '))
 
-    EMADict = {
-        '现价': float(Core.D['Market']['last']), 
-        '05日线': Core.D['EMA5'][-1], 
-        '10日线': Core.D['EMA10'][-1], 
-        '20日线': Core.D['EMA20'][-1], 
-        '60日线': Core.D['EMA60'][-1]
-        }
-    print('EMA 指标：', sorted(EMADict.items(), key = lambda kv:(kv[1], kv[0])))
-
-    print('EMA 五十差：', [Core.D['EMA510IN'][-3], Core.D['EMA510IN'][-2], Core.D['EMA510IN'][-1]])
-    print('\n')
-
     print('DIF: ', Core.D['DIF'][-5:])
     print('DEA: ', Core.D['DEA'][-5:])
     print('MACD: ', Core.D['MACD'][-5:])
+
+    print('\n')
 
     print('看涨交易：', Core.Long[-4:])
     print('看空交易：', Core.Short[-4:])
@@ -111,9 +101,11 @@ System.ClearScreen()
 Multitask.SimpleThread(Update, ()).Start()
 while(True):  
     try:
+        print(Core.D['Order'])
+        input()
         HomePage()
         ThinkThink()
-        Core.ResultSave(r'C:\Users\Happy\Desktop\BackTrack.txt')
+        Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
         Multitask.SimpleThread(Update, ()).Start()
         Sleep(1)
     except KeyError as e:

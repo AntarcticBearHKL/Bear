@@ -51,6 +51,8 @@ class CoreSystem:
         Ret['Profit'] = self.Profit
         Ret['Error'] = [str(Item) for Item in self.Error]
 
+        File.Write(Path, json.dumps(Ret))
+
 
     def GetMarketInfo(self):
         self.Data['Market'] = self.Swap.get_specific_ticker('BTC-USDT-SWAP')
@@ -79,7 +81,7 @@ class CoreSystem:
         pass
 
 
-    def Price(self, Num):
+    def PriceLatest(self, Num):
         Time = Date()
         
         TimeStamp = []
@@ -90,7 +92,7 @@ class CoreSystem:
 
         for i in range(Num):
             End = Time.ISOString()
-            Start = Time.Shift(Day=-10).ISOString()
+            Start = Time.Shift(Hour=-2).ISOString()
             Result = self.Swap.get_kline(instrument_id='BTC-USDT-SWAP',start=Start, end=End, granularity='60')
 
             TS = [price[0] for price in Result]

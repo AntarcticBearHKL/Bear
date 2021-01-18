@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /BearApplication
+cd /Bear
 git fetch --all
 git reset --hard origin/master
 git pull

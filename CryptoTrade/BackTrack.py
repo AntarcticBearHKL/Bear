@@ -28,7 +28,7 @@ def ThinkThink(TimePoint):
             Core.Short.append([1, Core.D['TimeStamp'][TimePoint], Core.D['OpenPrice'][TimePoint]])  
 
 if Reload:
-    Core.HistoryPrice(3)
+    Core.HistoryPrice(1)
     Core.DataSave(r'C:\Users\Happy\Desktop\BackTrack.txt')
 else:
     Core.DataLoad(r'C:\Users\Happy\Desktop\BackTrack.txt')
