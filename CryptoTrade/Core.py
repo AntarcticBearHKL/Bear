@@ -24,8 +24,6 @@ class CoreSystem:
         self.Profit = []
         self.Error = []
 
-        self.D = self.Data
-
         api_key = "f735b07f-e18d-4ca3-8b8a-beaa61ad16c1"
         secret_key = "F042A3D395A940DEBA703A522B29DF78"
         passphrase = "T1r2a3deCode"
@@ -77,8 +75,11 @@ class CoreSystem:
             type=int(Direction) + 2, price=Price, 
             size=Size, client_oid=ID)
 
-    def CancelOrder(self):
-        pass
+    def CancelOrder(self, OrderID=None, ClientID=None):
+        if OrderID:
+            self.Swap.revoke_order(instrument_id='BTC-USDT-SWAP', order_id=OrderID)
+        elif ClientID:
+            self.Swap.revoke_order(instrument_id='BTC-USDT-SWAP', client_oid=ClientID)
 
 
     def PriceLatest(self, Num):
@@ -198,8 +199,8 @@ class CoreSystem:
     def MACD(self):
         DIF, DEA, NOIR = talib.MACD(
             numpy.array(self.Data['ClosePrice']),
-            fastperiod=8, 
-            slowperiod=16, 
+            fastperiod=10, 
+            slowperiod=20, 
             signalperiod=10)
 
         self.Data['DIF'] = []
