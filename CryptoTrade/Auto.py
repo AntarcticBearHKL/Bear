@@ -101,8 +101,6 @@ System.ClearScreen()
 Multitask.SimpleThread(Update, ()).Start()
 while(True):  
     try:
-        print(Core.D['Order'])
-        input()
         HomePage()
         ThinkThink()
         Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
