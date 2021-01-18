@@ -15,9 +15,12 @@ import talib
 import numpy
 import json
 
+
 class CoreSystem:
     def __init__(self):
         self.StartTime = Date()
+        self.Initialized = False
+
         self.Data = {}
         self.Long = [[-1]]
         self.Short = [[-1]]
@@ -201,7 +204,7 @@ class CoreSystem:
             else:
                 self.Data['EMA510IN'].append(None)
 
-    def MACD(self, Fastperiod=10, Slowperiod=20, Signalperiod=10):
+    def MACD(self, Fastperiod=10, Slowperiod=20, SignalPeriod=10):
         DIF, DEA, NOIR = talib.MACD(
             numpy.array(self.Data['ClosePrice']),
             fastperiod=Fastperiod, 
@@ -240,19 +243,24 @@ class CoreSystem:
                 self.Data['MACDIN'].append(round(self.Data['MACD'][Counter]-self.Data['MACD'][Counter-1],2))
 
 
-    def ThinkThink(TimePoint):
-        if Core.Data['MACD'][TimePoint-2] * Core.Data['MACD'][TimePoint-1] < 0:
-            if Core.Data['MACD'][TimePoint-1] > 0 and Core.Long[-1][0] != 0:
-                Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], 
-                Core.Data['OpenPrice'][TimePoint]])
-            elif Core.Data['MACD'][TimePoint-1] < 0 and Core.Short[-1][0] != 0:
-                Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], 
-                Core.Data['OpenPrice'][TimePoint]])
+    def StrategyRun(self, Offset = 0):
+        if not self.Initialized:
+            self.StartPoint = 0
+            self.Offset = Offset
 
-        if Core.Data['MACDIN'][TimePoint-2] * Core.Data['MACDIN'][TimePoint-1] < 0:
-            if Core.Data['MACDIN'][TimePoint-1] < 0 and Core.Long[-1][0] == 0:
-                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Long[-1][2])
-                Core.Long.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
-            elif Core.Data['MACDIN'][TimePoint-1] > 0 and Core.Short[-1][0] == 0:
-                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Short[-1][2])
-                Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  
+            for Counter in range(len(self.Data['TimeStamp'])):
+                ItemNum = 0
+                for Item in self.Data:
+                    ItemNum += 1
+                    if self.Data[Item][Counter] == None:
+                        self.StartPoint+=1
+                        break
+                if ItemNum == len(Core.Data):
+                    break
+            
+            self.CurrentPoint = self.StartPoint + self.Offset
+
+        if self.CurrentPoint < len(Core.Data['TimeStamp']):
+            self.CurrentPoint += 1
+            return True
+        return False
