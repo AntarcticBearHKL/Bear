@@ -2,7 +2,7 @@
     "server":"47.74.39.29",
     "server_port":6603,
     "local_address": "127.0.0.1",
-    "local_port":1080,
+    "local_port":9982,
     "password":"1234567890",
     "timeout":300,
     "method":"aes-256-cfb",
