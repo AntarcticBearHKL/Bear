@@ -8,3 +8,15 @@
 2021-01-19 10:14:58.1499|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
 2021-01-19 10:28:54.7096|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
 2021-01-19 10:28:54.9070|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
+2021-01-19 10:32:05.6698|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
+2021-01-19 10:32:05.8673|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
+2021-01-19 10:32:08.6608|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
+2021-01-19 10:32:08.8473|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
+2021-01-19 10:32:09.1844|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
+2021-01-19 10:32:09.3649|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
+2021-01-19 10:32:46.5019|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
+2021-01-19 10:32:46.7034|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
+2021-01-19 10:32:57.6296|WARN|Shadowsocks.Controller.TCPHandler|System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)

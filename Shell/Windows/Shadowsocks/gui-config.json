@@ -13,8 +13,8 @@
   "onlineConfigSource": [],
   "strategy": null,
   "index": 0,
-  "global": false,
-  "enabled": false,
+  "global": true,
+  "enabled": true,
   "shareOverLan": false,
   "firstRun": false,
   "localPort": 1080,
@@ -69,5 +69,10 @@
     "ServerMoveDown": "",
     "RegHotkeysAtStartup": false
   },
-  "WebProxy": null
+  "WebProxy": {
+    "_BypassOnLocal": false,
+    "_ProxyAddress": "http://127.0.0.1:1080",
+    "_BypassList": null,
+    "_UseDefaultCredentials": false
+  }
 }
