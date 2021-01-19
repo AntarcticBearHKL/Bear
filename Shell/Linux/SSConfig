@@ -1,5 +1,5 @@
 {
-    "server":"47.74.39.29",
+    "server":"::",
     "server_port":62234,
     "local_address": "127.0.0.1",
     "local_port":9982,
