@@ -1,21 +1,101 @@
-[2021-01-19 10:33:40] Shadowsocks started
-[2021-01-19 10:34:17] Shadowsocks started
-[2021-01-19 10:34:22] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+[2021-01-19 10:38:30] Shadowsocks started (4.1.6)
+[2021-01-19 10:38:44] Shadowsocks started (4.1.6)
+[2021-01-19 10:38:52] System.Net.WebException: An exception occurred during a WebClient request. ---> System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.ConnectStream.EndRead(IAsyncResult asyncResult)
+   at System.Net.WebClient.DownloadBitsReadCallbackState(DownloadBitsState state, IAsyncResult result)
+   --- End of inner exception stack trace ---
+[2021-01-19 10:38:52] Shadowsocks started (4.1.6)
+[2021-01-19 10:38:55] Shadowsocks started (4.1.6)
+[2021-01-19 10:51:48] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
    at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
    at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
    at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
-[2021-01-19 10:34:25] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+[2021-01-19 10:52:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
    at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
    at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
    at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
-[2021-01-19 10:34:25] System.Reflection.TargetInvocationException: An exception occurred during the operation, making the result invalid.  Check InnerException for exception details. ---> System.Net.WebException: The underlying connection was closed: An unexpected error occurred on a send. ---> System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
-   at System.Net.TlsStream.EndWrite(IAsyncResult asyncResult)
-   at System.Net.PooledStream.EndWrite(IAsyncResult asyncResult)
-   at System.Net.ConnectStream.WriteHeadersCallback(IAsyncResult ar)
-   --- End of inner exception stack trace ---
-   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)
-   at System.Net.WebClient.GetWebResponse(WebRequest request, IAsyncResult result)
-   at System.Net.WebClient.DownloadBitsResponseCallback(IAsyncResult result)
-   --- End of inner exception stack trace ---
-   at System.ComponentModel.AsyncCompletedEventArgs.RaiseExceptionIfNecessary()
-   at Shadowsocks.Controller.UpdateChecker.http_DownloadStringCompleted(Object sender, DownloadStringCompletedEventArgs e)
+[2021-01-19 10:52:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:52:23] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:05] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:17] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:18] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:19] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:20] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:53:54] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:54:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:54:27] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:55:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:56:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:00] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:10] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:12] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:21] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:22] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:23] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:57:29] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:58:01] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 11:22:20] Shadowsocks started (4.1.6)

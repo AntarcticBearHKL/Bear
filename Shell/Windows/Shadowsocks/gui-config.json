@@ -1,22 +1,26 @@
 {
+  "version": "4.1.6",
   "configs": [
     {
       "server": "47.74.39.29",
       "server_port": 62234,
       "password": "1234567890",
       "method": "aes-256-cfb",
+      "plugin": "",
+      "plugin_opts": "",
+      "plugin_args": "",
       "remarks": "",
-      "auth": false,
       "timeout": 5
     }
   ],
   "strategy": null,
   "index": 0,
-  "global": false,
+  "global": true,
   "enabled": false,
   "shareOverLan": false,
   "isDefault": false,
   "localPort": 1080,
+  "portableMode": true,
   "pacUrl": null,
   "useOnlinePac": false,
   "secureLocalPac": true,
@@ -24,7 +28,31 @@
   "autoCheckUpdate": true,
   "checkPreRelease": false,
   "isVerboseLogging": false,
-  "logViewer": null,
-  "proxy": null,
-  "hotkey": null
+  "logViewer": {
+    "topMost": false,
+    "wrapText": false,
+    "toolbarShown": false,
+    "Font": "Consolas, 8pt",
+    "BackgroundColor": "Black",
+    "TextColor": "White"
+  },
+  "proxy": {
+    "useProxy": false,
+    "proxyType": 0,
+    "proxyServer": "",
+    "proxyPort": 0,
+    "proxyTimeout": 3,
+    "useAuth": false,
+    "authUser": "",
+    "authPwd": ""
+  },
+  "hotkey": {
+    "SwitchSystemProxy": "",
+    "SwitchSystemProxyMode": "",
+    "SwitchAllowLan": "",
+    "ShowLogs": "",
+    "ServerMoveUp": "",
+    "ServerMoveDown": "",
+    "RegHotkeysAtStartup": false
+  }
 }

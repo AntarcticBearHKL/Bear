@@ -1,0 +1,3 @@
+#/bin/bash
+cd /Bear/CryptoTrade
+python Auto.py

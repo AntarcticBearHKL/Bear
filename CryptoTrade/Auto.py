@@ -101,7 +101,7 @@ while(True):
     try:
         HomePage()
         Core.Strategy(-1)
-        Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
+        #Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
         Multitask.SimpleThread(Update, ()).Start()
         Sleep(1)
     except KeyError as e:
