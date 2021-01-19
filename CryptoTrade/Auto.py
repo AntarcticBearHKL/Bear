@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-  
+
 from PyBear.System.Chronus import Date
 from PyBear.System.Chronus import Sleep
 import PyBear.System.System as System
