@@ -274,68 +274,68 @@ class CoreSystem:
 
 
     def StrategyOL(self, TimePoint):
-        if self.Data['MACD'][TimePoint-2] * self.Data['MACD'][TimePoint-1] < 0:
-            if self.Data['MACD'][TimePoint-1] > 0 and self.Long[-1][0] != 0:
-                self.Long.append([0, self.Data['TimeStamp'][TimePoint], 
-                self.Data['OpenPrice'][TimePoint]])
-            elif self.Data['MACD'][TimePoint-1] < 0 and self.Short[-1][0] != 0:
-                self.Short.append([0, self.Data['TimeStamp'][TimePoint], 
-                self.Data['OpenPrice'][TimePoint]])
+        if Core.Data['MACD'][TimePoint-2] * Core.Data['MACD'][TimePoint-1] < 0:
+            if Core.Data['MACD'][TimePoint-1] > 0 and Core.Long[-1][0] != 0:
+                Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], 
+                Core.Data['OpenPrice'][TimePoint]])
+            elif Core.Data['MACD'][TimePoint-1] < 0 and Core.Short[-1][0] != 0:
+                Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], 
+                Core.Data['OpenPrice'][TimePoint]])
 
-        if self.Data['MACDIN'][TimePoint-2] * self.Data['MACDIN'][TimePoint-1] < 0:
-            if self.Data['MACDIN'][TimePoint-1] < 0 and self.Long[-1][0] == 0:
-                self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Long[-1][2])
-                self.Long.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
-            elif self.Data['MACDIN'][TimePoint-1] > 0 and self.Short[-1][0] == 0:
-                self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Short[-1][2])
-                self.Short.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])  
+        if Core.Data['MACDIN'][TimePoint-2] * Core.Data['MACDIN'][TimePoint-1] < 0:
+            if Core.Data['MACDIN'][TimePoint-1] < 0 and Core.Long[-1][0] == 0:
+                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Long[-1][2])
+                Core.Long.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
+            elif Core.Data['MACDIN'][TimePoint-1] > 0 and Core.Short[-1][0] == 0:
+                Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Short[-1][2])
+                Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  
 
     def Strategy(self, TimePoint):
-        if self.Judge([
-            self.Long[-1][0] != 0,
-            self.Data['DEA'][TimePoint-1] > 0,  
-            self.Data['MACD'][TimePoint-2] < 0,
-            self.Data['MACD'][TimePoint-1] > 0,
-        ]) or self.Judge([
-            self.Long[-1][0] != 0,
-            self.Data['DEA'][TimePoint-2] < 0, 
-            self.Data['DEA'][TimePoint-1] > 0, 
+        if Core.Judge([
+            Core.Long[-1][0] != 0,
+            Core.Data['DEA'][TimePoint-1] > 0,  
+            Core.Data['MACD'][TimePoint-2] < 0,
+            Core.Data['MACD'][TimePoint-1] > 0,
+        ]) or Core.Judge([
+            Core.Long[-1][0] != 0,
+            Core.Data['DEA'][TimePoint-2] < 0, 
+            Core.Data['DEA'][TimePoint-1] > 0, 
         ]):   
-            self.Long.append([0, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
+            Core.Long.append([0, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
 
         ###########################
 
-        if self.Judge([
-            self.Short[-1][0] != 0,
-            self.Data['DEA'][TimePoint-1] < 0,  
-            self.Data['MACD'][TimePoint-2] > 0,
-            self.Data['MACD'][TimePoint-1] < 0,
-        ]) or self.Judge([
-            self.Short[-1][0] != 0,
-            self.Data['DEA'][TimePoint-2] > 0, 
-            self.Data['DEA'][TimePoint-1] < 0, 
+        if Core.Judge([
+            Core.Short[-1][0] != 0,
+            Core.Data['DEA'][TimePoint-1] < 0,  
+            Core.Data['MACD'][TimePoint-2] > 0,
+            Core.Data['MACD'][TimePoint-1] < 0,
+        ]) or Core.Judge([
+            Core.Short[-1][0] != 0,
+            Core.Data['DEA'][TimePoint-2] > 0, 
+            Core.Data['DEA'][TimePoint-1] < 0, 
         ]):   
-            self.Short.append([0, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
+            Core.Short.append([0, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
 
         ###########################
 
-        if self.Judge([
-            self.Long[-1][0] == 0,
-            self.Data['MACD'][TimePoint-2] > 0,
-            self.Data['MACD'][TimePoint-1] < 0,
+        if Core.Judge([
+            Core.Long[-1][0] == 0,
+            Core.Data['MACD'][TimePoint-2] > 0,
+            Core.Data['MACD'][TimePoint-1] < 0,
         ]):
-            self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Long[-1][2])
-            self.Long.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
+            Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Long[-1][2])
+            Core.Long.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])
 
         ###########################
 
-        if self.Judge([
-            self.Short[-1][0] == 0,
-            self.Data['MACD'][TimePoint-2] < 0,
-            self.Data['MACD'][TimePoint-1] > 0,
+        if Core.Judge([
+            Core.Short[-1][0] == 0,
+            Core.Data['MACD'][TimePoint-2] < 0,
+            Core.Data['MACD'][TimePoint-1] > 0,
         ]):
-            self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Short[-1][2])
-            self.Short.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])  
+            Core.Profit.append(Core.Data['OpenPrice'][TimePoint] - Core.Short[-1][2])
+            Core.Short.append([1, Core.Data['TimeStamp'][TimePoint], Core.Data['OpenPrice'][TimePoint]])  
 
         ###########################
 
