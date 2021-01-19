@@ -1,0 +1,14 @@
+#/bin/bash
+rm /etc/apt/sources.list
+cp /Bear/Documents/SpeedUp/APT /etc/apt/sources.list
+
+echo python='"python3"'>>~/.bashrc
+echo PATH=$PATH:/Bear/Linux>>~/.bashrc
+
+apt remove vim-common
+apt install vim
+
+apt install python3
+apt install python3-pip
+git clone https://github.com/AntarcticBearHKL/PyBear.git /usr/lib/python3/dist-packages/PyBear
+
