@@ -62,8 +62,6 @@ def HomePage():
 
     print("错误次数: ", len(Core.Error))
 
-    print(Core.Data['OpenPrice'][-3:])
-
     if len(Core.Data['Order']) != 0:
         print('\033[1;36;40m ---%s--- \033[0m'%('等待成交：'))
         Typelist = [None, "买多：", "买空：", "平多：", "平空："]
@@ -96,30 +94,13 @@ def HomePage():
                     print('\033[1;32;40m %s%s%s%s%s \033[0m'%('收益：',Profit, ' 收益率：', ProfitP, '%'))
                 print('\n')
 
-def ThinkThink():
-    if Core.Data['MACD'][-3] * Core.Data['MACD'][-2] < 0:
-        if Core.Data['MACD'][-2] > 0 and Core.Long[-1][0] != 0:
-            Core.Long.append([0, Core.Data['TimeStamp'][-1], 
-            Core.Data['OpenPrice'][-1]])
-
-        elif Core.Data['MACD'][-2] < 0 and Core.Short[-1][0] != 0:
-            Core.Short.append([0, Core.Data['TimeStamp'][-1], 
-            Core.Data['OpenPrice'][-1]])
-
-    if Core.Data['MACDIN'][-3] * Core.Data['MACDIN'][-2] < 0:
-        if Core.Data['MACDIN'][-2] < 0 and Core.Long[-1][0] == 0:
-            Core.Profit.append(Core.Data['OpenPrice'][-1] - Core.Long[-1][2])
-            Core.Long.append([1, Core.Data['TimeStamp'][-1], Core.Data['OpenPrice'][-1]])
-        elif Core.Data['MACDIN'][-2] > 0 and Core.Short[-1][0] == 0:
-            Core.Profit.append(Core.Data['OpenPrice'][-1] - Core.Short[-1][2])
-            Core.Short.append([1, Core.Data['TimeStamp'][-1], Core.Data['OpenPrice'][-1]])  
 
 System.ClearScreen()
 Multitask.SimpleThread(Update, ()).Start()
 while(True):  
     try:
         HomePage()
-        ThinkThink()
+        Core.Strategy(-1)
         Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
         Multitask.SimpleThread(Update, ()).Start()
         Sleep(1)
