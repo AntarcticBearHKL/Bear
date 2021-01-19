@@ -2,16 +2,16 @@
   "version": "4.4.0.0",
   "configs": [
     {
-      "server": "",
-      "server_port": 8388,
-      "password": "",
-      "method": "chacha20-ietf-poly1305",
+      "server": "47.74.39.29",
+      "server_port": 6603,
+      "password": "1234567890",
+      "method": "aes-256-gcm",
       "timeout": 5,
       "warnLegacyUrl": false
     }
   ],
   "onlineConfigSource": [],
-  "strategy": "",
+  "strategy": null,
   "index": 0,
   "global": false,
   "enabled": false,

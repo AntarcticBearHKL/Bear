@@ -5,6 +5,6 @@
     "local_port":9982,
     "password":"1234567890",
     "timeout":300,
-    "method":"aes-256-cfb",
+    "method":"aes-256-gcm",
     "fast_open": false
 }
