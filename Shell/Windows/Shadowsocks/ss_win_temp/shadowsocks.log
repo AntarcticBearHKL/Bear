@@ -1,22 +1,21 @@
-2021-01-19 09:40:38.1300|INFO|Shadowsocks.Controller.I18N|Current language is: en-GB
-2021-01-19 09:40:38.1639|INFO|Shadowsocks.Controller.I18N|Translation for en-GB not found
-2021-01-19 09:40:38.4721|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 09:40:38.8032|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 09:40:49.2321|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 09:40:49.4365|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:14:57.9186|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:14:58.1499|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:28:54.7096|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:28:54.9070|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:32:05.6698|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:32:05.8673|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:32:08.6608|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:32:08.8473|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:32:09.1844|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:32:09.3649|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:32:46.5019|INFO|Shadowsocks.Controller.ShadowsocksController|WPF Localization Extension|Current culture: en-GB
-2021-01-19 10:32:46.7034|INFO|Shadowsocks.Controller.Listener|Shadowsocks started (4.4.0.0)
-2021-01-19 10:32:57.6296|WARN|Shadowsocks.Controller.TCPHandler|System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+[2021-01-19 10:33:40] Shadowsocks started
+[2021-01-19 10:34:17] Shadowsocks started
+[2021-01-19 10:34:22] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
    at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
    at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
    at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:34:25] System.Net.Sockets.SocketException (0x80004005): No connection could be made because the target machine actively refused it
+   at Shadowsocks.Util.Sockets.WrappedSocket.EndConnect(IAsyncResult asyncResult)
+   at Shadowsocks.Proxy.DirectConnect.EndConnectDest(IAsyncResult asyncResult)
+   at Shadowsocks.Controller.TCPHandler.ConnectCallback(IAsyncResult ar)
+[2021-01-19 10:34:25] System.Reflection.TargetInvocationException: An exception occurred during the operation, making the result invalid.  Check InnerException for exception details. ---> System.Net.WebException: The underlying connection was closed: An unexpected error occurred on a send. ---> System.IO.IOException: Authentication failed because the remote party has closed the transport stream.
+   at System.Net.TlsStream.EndWrite(IAsyncResult asyncResult)
+   at System.Net.PooledStream.EndWrite(IAsyncResult asyncResult)
+   at System.Net.ConnectStream.WriteHeadersCallback(IAsyncResult ar)
+   --- End of inner exception stack trace ---
+   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)
+   at System.Net.WebClient.GetWebResponse(WebRequest request, IAsyncResult result)
+   at System.Net.WebClient.DownloadBitsResponseCallback(IAsyncResult result)
+   --- End of inner exception stack trace ---
+   at System.ComponentModel.AsyncCompletedEventArgs.RaiseExceptionIfNecessary()
+   at Shadowsocks.Controller.UpdateChecker.http_DownloadStringCompleted(Object sender, DownloadStringCompletedEventArgs e)
