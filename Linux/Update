@@ -1,0 +1,10 @@
+#!/bin/sh
+cd /Bear
+git fetch origin master
+git reset --hard origin/master
+git pull
+
+cd /usr/lib/python3/dist-packages/PyBear
+git fetch origin master
+git reset --hard origin/master
+git pull              
