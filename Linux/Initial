@@ -21,6 +21,7 @@ rm -rf /Bear/File/Talib/ta-lib/ta-lib
 
 pip3 install --upgrade pip
 pip3 install TA-lib
+pip3 install shadowsocks
 pip3 install scikit-learn
 pip3 install statsmodels
 pip3 install pymysql
