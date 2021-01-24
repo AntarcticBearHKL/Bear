@@ -1,4 +1,5 @@
 #/bin/bash
+
 rm /etc/apt/sources.list
 cp /Bear/Documents/SpeedUp/APT /etc/apt/sources.list
 
@@ -7,6 +8,8 @@ echo PATH=$PATH:/Bear/Linux>>~/.bashrc
 
 apt remove vim-common
 apt install vim
+
+apt install privoxy
 
 apt install python3
 apt install python3-pip
