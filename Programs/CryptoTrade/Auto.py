@@ -22,8 +22,8 @@ def Update():
         Core.GetMarketInfo()
         Core.GetOrderInfo()
         Core.GetHoldingInfo()
-        Core.PriceLatest(3)
-        Core.EMA()
+        Core.PriceHistory(2)
+        #Core.EMA()
         Core.MACD()
 
         UpdateCounter += 1
@@ -103,9 +103,8 @@ while(True):
     try:
         HomePage()
         Core.Strategy(-1)
-        #Core.ResultSave(r'C:\Users\Happy\Desktop\AutoLog.txt')
         Multitask.SimpleThread(Update, ()).Start()
-        Sleep(1)
+        Sleep(5)
     except KeyError as e:
         print("正在加载：", e)
         Sleep(1)
