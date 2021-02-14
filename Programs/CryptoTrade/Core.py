@@ -10,6 +10,7 @@ import okex.information_api as information
 from PyBear.System.Chronus import Date
 from PyBear.System.Chronus import Sleep
 from PyBear.System import File
+from PyBear.Math import Cipher
 import datetime
 import talib
 import numpy
@@ -18,80 +19,101 @@ import json
 
 class CoreSystem:
     def __init__(self):
-        self.StartTime = Date()
+        self.startTime = Date()
         self.Initialized = False
 
-        self.Data = {}
-        self.Long = [[-1]]
-        self.Short = [[-1]]
-        self.Profit = []
-        self.Error = []
+        self.data = {}
+        self.marketPrice = None
+
+        self.longOrder = None
+        self.shortOrder = None
+        self.orderList = []
+        self.error = {}
 
         api_key = "f735b07f-e18d-4ca3-8b8a-beaa61ad16c1"
         secret_key = "F042A3D395A940DEBA703A522B29DF78"
         passphrase = "T1r2a3deCode"
 
-        self.Account = account.AccountAPI(api_key, secret_key, passphrase, False)
+        self.account = account.AccountAPI(api_key, secret_key, passphrase, False)
 
-        self.Index = index.IndexAPI(api_key, secret_key, passphrase, False)
+        self.index = index.IndexAPI(api_key, secret_key, passphrase, False)
 
-        self.Information = information.InformationAPI(api_key, secret_key, passphrase, False)
+        self.information = information.InformationAPI(api_key, secret_key, passphrase, False)
 
-        self.Swap = swap.SwapAPI(api_key, secret_key, passphrase, False)
-
-    def DataSave(self, Path):
-        File.Write(Path, json.dumps(self.Data))
-
-    def DataLoad(self, Path):
-        self.Data = json.loads(File.Read(Path))
-
-    def ResultSave(self, Path):
-        Ret = {}
-        Ret['Long'] = self.Long
-        Ret['Short'] = self.Short
-        Ret['Profit'] = self.Profit
-        Ret['Error'] = [str(Item) for Item in self.Error]
-
-        File.Write(Path, json.dumps(Ret))
+        self.swap = swap.SwapAPI(api_key, secret_key, passphrase, False)
 
 
-    def Judge(self, JudgeItem):
-        if JudgeItem.count(False) == 0:
+    def dataSave(self, Path):
+        File.Write(Path, json.dumps(self.data))
+
+    def dataLoad(self, Path):
+        self.data = json.loads(File.Read(Path))
+
+    def resultLog(self, Path):
+        File.Write(Path, json.dumps(self.orderList))
+        
+    def errorLog(self, Path):
+        File.Write(Path, json.dumps(self.error))
+
+
+    def judge(self, judgeItem):
+        if judgeItem.count(False) == 0:
                 return True
         return False
 
 
-    def GetMarketInfo(self):
-        self.Data['Market'] = self.Swap.get_specific_ticker('BTC-USDT-SWAP')
+    def getMarketInfo(self):
+        self.data['Market'] = self.swap.get_specific_ticker('BTC-USDT-SWAP')
+        self.marketPrice = self.data['Market']['last']
 
-    def GetWalletInfo(self):
-        self.Data['Wallet'] = self.Swap.get_coin_account('BTC-USDT-SWAP')
+    def getWalletInfo(self):
+        self.data['Wallet'] = self.swap.get_coin_account('BTC-USDT-SWAP')
 
-    def GetOrderInfo(self):
-        self.Data['Order'] = self.Swap.get_order_list(instrument_id='BTC-USDT-SWAP', state='6')[0]['order_info']
+    def getOrderInfo(self):
+        self.data['Order'] = self.swap.get_order_list(instrument_id='BTC-USDT-SWAP', state='6')[0]['order_info']
 
-    def GetHoldingInfo(self):
-        self.Data['Holding'] = self.Swap.get_specific_position('BTC-USDT-SWAP')['holding']
-
-
-    def Open(self, Direction, Size, Price, ID='DefaultOrder'):
-        self.Swap.take_order(instrument_id='BTC-USDT-SWAP', 
-            type=Direction, price=Price, 
-            size=Size, client_oid=ID)
-
-    def Liquidate(self, Direction, Size, Price):
-        self.Swap.take_order(instrument_id='BTC-USDT-SWAP', 
-            type=int(Direction) + 2, price=Price, 
-            size=Size, client_oid=ID)
-
-    def CancelOrder(self, OrderID=None, ClientID=None):
-        if OrderID:
-            self.Swap.revoke_order(instrument_id='BTC-USDT-SWAP', order_id=OrderID)
-        elif ClientID:
-            self.Swap.revoke_order(instrument_id='BTC-USDT-SWAP', client_oid=ClientID)
+    def getOrderInfoById(self, clientOid):
+        return self.swap.get_order_info(instrument_id='BTC-USDT-SWAP', client_oid=clientOid)
+    def getHoldingInfo(self):
+        self.data['Holding'] = self.swap.get_specific_position('BTC-USDT-SWAP')['holding']
 
 
-    def PriceLatest(self, Num): #by minute
+
+    def placeOrder(self, direction, size, price):
+        clientOid = 'Order' + Cipher.NumberIndex()        
+        self.swap.take_order(instrument_id='BTC-USDT-SWAP', 
+            type=direction, price=price,   
+            size=size, client_oid=clientOid)
+        return clientOid
+
+    def placeOrderMatchPrice(self, direction, size):
+        clientOid = 'Order' + Cipher.NumberIndex()        
+        self.swap.take_order(instrument_id='BTC-USDT-SWAP', 
+        type=direction, order_type=4, price=None, 
+        size=size, client_oid=clientOid)
+        return clientOid
+
+    def cancelOrder(self, clientOid=None):
+        self.swap.revoke_order(instrument_id='BTC-USDT-SWAP', client_oid=clientOid)
+
+    def cancelAll(self):
+        for order in self.data['Order']:
+            self.swap.revoke_order(instrument_id='BTC-USDT-SWAP', order_id=order['order_id'])
+   
+
+    def liquidateAll(self):
+        if self.longOrder:
+            size = self.getOrderInfoById(self.longOrder[0])['size']
+            self.placeOrderMatchPrice(3, size)
+
+        if self.shortOrder:
+            size = self.getOrderInfoById(self.shortOrder[0])['size']
+            self.placeOrderMatchPrice(4, size)
+
+
+
+
+    def minutePrice(self, sampling): 
         Time = Date()
         
         TimeStamp = []
@@ -100,10 +122,10 @@ class CoreSystem:
         LowPrice = []
         ClosePrice = []
 
-        for i in range(Num):
+        for i in range(sampling):
             End = Time.ISOString()
             Start = Time.Shift(Hour=-2).ISOString()
-            Result = self.Swap.get_kline(instrument_id='BTC-USDT-SWAP',start=Start, end=End, granularity='60')
+            Result = self.swap.get_kline(instrument_id='BTC-USDT-SWAP',start=Start, end=End, granularity='60')
 
             TS = [price[0] for price in Result]
             TS.reverse()
@@ -131,13 +153,13 @@ class CoreSystem:
 
             Sleep(0.5)
 
-        self.Data['TimeStamp'] = TimeStamp
-        self.Data['OpenPrice'] = OpenPrice
-        self.Data['HighPrice'] = HighPrice
-        self.Data['LowPrice'] = LowPrice
-        self.Data['ClosePrice'] = ClosePrice
+        self.data['TimeStamp'] = TimeStamp
+        self.data['OpenPrice'] = OpenPrice
+        self.data['HighPrice'] = HighPrice
+        self.data['LowPrice'] = LowPrice
+        self.data['ClosePrice'] = ClosePrice
 
-    def PriceHistory(self, Num, ByMinute=Ture):
+    def monthPrice(self, Num, ByMinute=True):
         Time = Date()
         
         TimeStamp = []
@@ -150,10 +172,10 @@ class CoreSystem:
             End = Time.ISOString()
             if ByMinute:
                 Start = Time.Shift(Hour=-2).ISOString()
-                Result = self.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='60')
+                Result = self.swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='60')
             else:
                 Start = Time.Shift(Day=-10).ISOString()
-                Result = self.Swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
+                Result = self.swap.get_history_kline(instrument_id='BTC-USDT-SWAP',start=End, end=Start, granularity='3600')
 
             TS = [price[0] for price in Result]
             TS.reverse()
@@ -181,166 +203,118 @@ class CoreSystem:
 
             Sleep(0.5)
 
-        self.Data['TimeStamp'] = TimeStamp
-        self.Data['OpenPrice'] = OpenPrice
-        self.Data['HighPrice'] = HighPrice
-        self.Data['LowPrice'] = LowPrice
-        self.Data['ClosePrice'] = ClosePrice
+        self.data['TimeStamp'] = TimeStamp
+        self.data['OpenPrice'] = OpenPrice
+        self.data['HighPrice'] = HighPrice
+        self.data['LowPrice'] = LowPrice
+        self.data['ClosePrice'] = ClosePrice
 
-    def EMA(self):
-        self.Data['EMA5'] = talib.EMA(numpy.array(self.Data['ClosePrice']), timeperiod=5)
-        self.Data['EMA10'] = talib.EMA(numpy.array(self.Data['ClosePrice']), timeperiod=10)
-        self.Data['EMA20'] = talib.EMA(numpy.array(self.Data['ClosePrice']), timeperiod=20)
-        self.Data['EMA60'] = talib.EMA(numpy.array(self.Data['ClosePrice']), timeperiod=60)
-        
-        for Item in ['EMA5','EMA10','EMA20','EMA60']:
-            TempList = []
-            for EMA in self.Data[Item]:
-                if numpy.isnan(EMA):
-                    TempList.append(None)
-                else:
-                    TempList.append(float(round(EMA, 2)))
-            self.Data[Item] = TempList
-        
-        self.Data['EMA510IN'] = []
-        for Counter in range(len(self.Data['EMA5'])):
-            if self.Data['EMA5'][Counter] and self.Data['EMA10'][Counter]:
-                self.Data['EMA510IN'].append(round(self.Data['EMA5'][Counter]-self.Data['EMA10'][Counter], 2))
-            else:
-                self.Data['EMA510IN'].append(None)
 
-    def MACD(self, Fastperiod=13, Slowperiod=18, SignalPeriod=30):
+    def MACD(self, Fastperiod=30, Slowperiod=60, SignalPeriod=200):
         DIF, DEA, NOIR = talib.MACD(
-            numpy.array(self.Data['ClosePrice']),
+            numpy.array(self.data['ClosePrice']),
             fastperiod=Fastperiod, 
             slowperiod=Slowperiod, 
             signalperiod=SignalPeriod)
 
-        self.Data['DIF'] = []
-        self.Data['DEA'] = []
-        self.Data['MACD'] = []
-        self.Data['MACDDIR'] = []
+        tempDIF = []
+        tempDEA = []
+        tempMACD = []
+        tempMACDI = []
+        tempMACDII = []
 
         for Item in DIF:
             if numpy.isnan(Item):
-                self.Data['DIF'].append(None)
+                tempDIF.append(None)
             else:
-                self.Data['DIF'].append(round(Item,2))
+                tempDIF.append(round(Item,2))
 
         for Item in DEA:
             if numpy.isnan(Item):
-                self.Data['DEA'].append(None)
+                tempDEA.append(None)
             else:
-                self.Data['DEA'].append(round(Item,2))
+                tempDEA.append(round(Item,2))
 
         for Item in list(DIF - DEA):
             if numpy.isnan(Item):
-                self.Data['MACD'].append(None)
+                tempMACD.append(None)
             else:
-                self.Data['MACD'].append(round(Item*2,2))
+                tempMACD.append(round(Item*2,2))
 
-        for Counter in range(len(self.Data['MACD'])):
+        for Counter in range(len(tempMACD)):
             if Counter == 0:
-                self.Data['MACDDIR'].append(None)
-            elif self.Data['MACD'][Counter-1] == None:
-                self.Data['MACDDIR'].append(None)
+                tempMACDI.append(None)
+            elif tempMACD[Counter-1] == None:
+                tempMACDI.append(None)
             else:
-                Interval =  round(self.Data['MACD'][Counter]-self.Data['MACD'][Counter-1],2)
+                Interval =  round(tempMACD[Counter]-tempMACD[Counter-1],2)
                 if Interval>=0:
-                    self.Data['MACDDIR'].append(1)
+                    tempMACDI.append(1)
                 else:
-                    self.Data['MACDDIR'].append(-1)
+                    tempMACDI.append(-1)
 
-               
+        for Counter in range(len(tempMACDI)):
+            if Counter == 0:
+                tempMACDII.append(None)
+            elif tempMACDI[Counter-1] == None:
+                tempMACDII.append(None)
+            else:
+                if tempMACDI[Counter]>0 and tempMACDI[Counter-1]<0:
+                    tempMACDII.append(1)
+                elif tempMACDI[Counter]<0 and tempMACDI[Counter-1]>0:
+                    tempMACDII.append(-1)
+                else:
+                    tempMACDII.append(0)
 
+        self.data['DIF'] = tempDIF
+        self.data['DEA'] = tempDEA
+        self.data['MACD'] = tempMACD
+        self.data['MACDInterval'] = tempMACDI
+        self.data['MACDIntervalInverse'] = tempMACDII
+       
 
-    def StrategyRun(self, Offset):
+    def strategyBackTrack(self, Offset):
         if not self.Initialized:
             self.StartPoint = 0
             self.Offset = Offset
 
-            for Counter in range(len(self.Data['TimeStamp'])):
+            for Counter in range(len(self.data['TimeStamp'])):
                 ItemNum = 0
-                for Item in self.Data:
+                for Item in self.data:
                     ItemNum += 1
-                    if self.Data[Item][Counter] == None:
+                    if self.data[Item][Counter] == None:
                         self.StartPoint+=1
                         break
-                if ItemNum == len(self.Data):
+                if ItemNum == len(self.data):
                     break
             
             self.CurrentPoint = self.StartPoint + self.Offset - 1
             self.Initialized = True
 
-        if self.CurrentPoint < len(self.Data['TimeStamp']) - 1:
+        if self.CurrentPoint < len(self.data['TimeStamp']) - 1:
             self.CurrentPoint += 1
             return True
         return False
 
 
-    def StrategyOL(self, TimePoint):
-        if self.Data['MACD'][TimePoint-2] * self.Data['MACD'][TimePoint-1] < 0:
-            if self.Data['MACD'][TimePoint-1] > 0 and self.Long[-1][0] != 0:
-                self.Long.append([0, self.Data['TimeStamp'][TimePoint], 
-                self.Data['OpenPrice'][TimePoint]])
-            elif self.Data['MACD'][TimePoint-1] < 0 and self.Short[-1][0] != 0:
-                self.Short.append([0, self.Data['TimeStamp'][TimePoint], 
-                self.Data['OpenPrice'][TimePoint]])
+    def strategyMACD(self, TimePoint):
+        if self.data['MACDIntervalInverse'][TimePoint-1] == 1: #Long
+            if self.shortOrder:
+                size = self.getOrderInfoById(self.shortOrder[0])['size']
+                self.shortOrder.append(self.placeOrderMatchPrice(4, size))
+                self.orderList.append(['Short', self.shortOrder])
+                self.shortOrder = None
+            if not self.longOrder:
+                self.cancelAll()
+                self.longOrder = [self.placeOrderMatchPrice(1,1)]
 
-        if self.Data['MACDDIR'][TimePoint-2] * self.Data['MACDDIR'][TimePoint-1] < 0:
-            if self.Data['MACDDIR'][TimePoint-1] < 0 and self.Long[-1][0] == 0:
-                self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Long[-1][2])
-                self.Long.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
-            elif self.Data['MACDDIR'][TimePoint-1] > 0 and self.Short[-1][0] == 0:
-                self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Short[-1][2])
-                self.Short.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])  
-
-    def Strategy(self, TimePoint):
-        if self.Judge([
-            self.Long[-1][0] != 0,
-            self.Data['DEA'][TimePoint-1] > 0,  
-            self.Data['MACD'][TimePoint-2] < 0,
-            self.Data['MACD'][TimePoint-1] > 0,
-        ]) or self.Judge([
-            self.Long[-1][0] != 0,
-            self.Data['DEA'][TimePoint-2] < 0, 
-            self.Data['DEA'][TimePoint-1] > 0, 
-        ]):   
-            self.Long.append([0, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
-
-        ###########################
-
-        if self.Judge([
-            self.Short[-1][0] != 0,
-            self.Data['DEA'][TimePoint-1] < 0,  
-            self.Data['MACD'][TimePoint-2] > 0,
-            self.Data['MACD'][TimePoint-1] < 0,
-        ]) or self.Judge([
-            self.Short[-1][0] != 0,
-            self.Data['DEA'][TimePoint-2] > 0, 
-            self.Data['DEA'][TimePoint-1] < 0, 
-        ]):   
-            self.Short.append([0, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
-
-        ###########################
-
-        if self.Judge([
-            self.Long[-1][0] == 0,
-            self.Data['MACD'][TimePoint-2] > 0,
-            self.Data['MACD'][TimePoint-1] < 0,
-        ]):
-            self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Long[-1][2])
-            self.Long.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])
-
-        ###########################
-
-        if self.Judge([
-            self.Short[-1][0] == 0,
-            self.Data['MACD'][TimePoint-2] < 0,
-            self.Data['MACD'][TimePoint-1] > 0,
-        ]):
-            self.Profit.append(self.Data['OpenPrice'][TimePoint] - self.Short[-1][2])
-            self.Short.append([1, self.Data['TimeStamp'][TimePoint], self.Data['OpenPrice'][TimePoint]])  
-
-        ###########################
-
+        if self.data['MACDIntervalInverse'][TimePoint-1] == -1: #Short
+            if self.longOrder:
+                size = self.getOrderInfoById(self.longOrder[0])['size']
+                self.longOrder.append(self.placeOrderMatchPrice(3, size))
+                self.orderList.append(['Long', self.longOrder])
+                self.longOrder = None
+            if not self.shortOrder:
+                self.cancelAll()
+                self.shortOrder = [self.placeOrderMatchPrice(2,1)]
+        
