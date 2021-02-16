@@ -3,3 +3,4 @@ cd ./bash
 chmod +x *
 echo 'export PATH=$PATH:$PWD'>>/root/.bashrc
 source /root/.bashrc
+cd ../

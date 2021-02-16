@@ -20,3 +20,4 @@ pip3 install redis
 pip3 install pycryptodome
 pip3 install jieba
 pip3 install nltk
+
