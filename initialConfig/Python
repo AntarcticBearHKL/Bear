@@ -1,5 +1,8 @@
 #!/bin/bash
 
+apt install python3
+apt install python3-pip
+
 pip3 install --upgrade pip
 pip3 install TA-lib
 pip3 install shadowsocks

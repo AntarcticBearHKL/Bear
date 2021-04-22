@@ -1,6 +1,6 @@
 {
-   "server":["47.74.15.124"],
-   "server_port":62333,
+   "server":["8.209.254.171"],
+   "server_port":6233,
    "password":"1234567890",
    "timeout":300,
    "method":"aes-256-cfb",
