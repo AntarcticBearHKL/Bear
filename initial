@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ./bash
 chmod +x *
-echo 'export PATH=$PATH:$PWD'>>/root/.bashrc
+echo 'export PATH=$PATH:'$PWD>>/root/.bashrc
 source /root/.bashrc
 cd ../
